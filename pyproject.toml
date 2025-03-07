@@ -1,0 +1,153 @@
+[project]
+name = "rye-template"
+version = "0.0.1"
+description = "Add your description here"
+authors = [
+    { name = "Firstname Lastname", email = "mail@address.com" }
+]
+dependencies = []
+readme = "README.md"
+requires-python = ">= 3.12"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.coverage.run]
+source = [
+    "src/",
+]
+
+[tool.coverage.xml]
+# Write the XML report to a specific folder for tidiness purposes
+output = "badges/coverage.xml"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rye_template"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true  # Add trailing comma after multi-line imports
+known_first_party = ["rye_template"]
+known_third_party = []
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+default_section = "THIRDPARTY"
+lines_after_imports = 2
+
+[tool.mypy]
+files = ["src", "tests"]
+ignore_missing_imports = true
+exclude = []
+
+# Library-specific configurations; Create a whole new block for each library including
+# the header or provide a list to `module`
+[[tool.mypy.overrides]]
+module = "<library_name>"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "template_notebook",
+    # Exclude notebook files
+    "*.ipynb",
+]
+
+# Same as Black
+line-length = 88
+indent-width = 4
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs
+indent-style = "space"
+# Like Black, respect magic trailing commas
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending
+line-ending = "auto"
+# Enable reformatting of code snippets in docstrings
+docstring-code-format = true
+# Align max line length with the general setting
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint]
+select = [
+    "B",    # flake8-bugbear - find likely bugs and design problems
+    "D",    # pydocstyle - enforce docstrings and their style
+    "E",    # pycodestyle - PEP 8 Python programming style checks
+    "F",    # pyflakes - check Python source files for errors
+    "I",    # isort - sort imports
+    "N",    # pep8-naming - PEP 8 naming conventions
+    "SIM",  # flake8-simplify - simplify code
+    "UP",   # pyupgrade - automatically replace old syntax with new one
+]
+ignore = [
+    "D100",  # Missing docstring in public module
+    "D104",  # Missing docstring in public package
+    "D200",  # One-line docstring should fit on one line - does not take the quotes
+    # into account
+    "D205",  # 1 blank line required between summary line and description - often
+    # collides with respecting the max line length
+    "N812",  # Lowercase module imported as non-lowercase
+]
+extend-select = [
+    "E501",  # Add the "line-too-long" rule to the enforced rule set. By target_default, Ruff
+    # omits rules that overlap with the use of a formatter, like Black
+]
+# Allow fix for all enabled rules (when `--fix`) is provided
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"  # Numpy docstring style
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "coverage>=7.6.12",
+    "defusedxml>=0.7.1",
+    "genbadge>=1.1.1",
+    "mypy>=1.15.0",
+    "pybadges>=3.0.1",
+    "pytest>=8.3.5",
+    "ruff>=0.9.10",
+]
+
+[tool.rye.scripts]
+main = { cmd = "python src/rye_template/main.py" }

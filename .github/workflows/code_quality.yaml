@@ -1,0 +1,39 @@
+# Check the following documentation in order to build your own workflows:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+
+name: Check Code Style and Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Rye
+      uses: eifinger/setup-rye@v4
+      with:
+        version: "latest"
+        enable-cache: true
+
+    - name: Install Dependencies
+      run: |
+        rye sync
+
+    - name: Lint with Ruff
+      run: |
+        rye run ruff check --output-format=github .
+
+    - name: Format with Ruff
+      run: |
+        rye run ruff format --check .
+
+    - name: Type Hinting with MyPy
+      run: |
+        rye run mypy .
+
+    - name: Run Tests with PyTest
+      run: |
+        rye run pytest
